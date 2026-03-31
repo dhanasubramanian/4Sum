@@ -1,0 +1,33 @@
+import java.util.*;
+
+class Solution {
+    public List<List<Integer>> fourSum(int[] nums, int target) {
+        // 1. Using a Set of Lists to automatically handle duplicate quadruplets
+        Set<List<Integer>> resultSet = new HashSet<>();
+        int n = nums.length;
+        
+        // Sorting helps in keeping triplets in order and avoiding duplicates
+        Arrays.sort(nums);
+
+        for (int i = 0; i < n - 3; i++) {
+            for (int j = i + 1; j < n - 2; j++) {
+                
+                // Using a HashSet for the 2-sum part (finding k and l)
+                HashSet<Long> seen = new HashSet<>();
+                for (int k = j + 1; k < n; k++) {
+                    // Use long to prevent overflow (target - a - b - c)
+                    long needed = (long)target - nums[i] - nums[j] - nums[k];
+
+                    if (seen.contains(needed)) {
+                        // Found a match!
+                        List<Integer> quad = Arrays.asList(nums[i], nums[j], (int)needed, nums[k]);
+                        resultSet.add(quad);
+                    }
+                    seen.add((long)nums[k]);
+                }
+            }
+        }
+        // Convert the Set back to a List to return
+        return new ArrayList<>(resultSet);
+    }
+}
